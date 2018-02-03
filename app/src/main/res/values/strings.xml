@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Llama Chat</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="send">Send</string>
+    <string name="message">Message</string>
+    <string name="textview">TextView</string>
+    <string name="type_something">Type Something</string>
+    <string name="_2nd_activity">2nd Activity</string>
+    <string name="message_activity">Message Activity</string>
+    <string name="sign_out">Sign out</string>
+</resources>
