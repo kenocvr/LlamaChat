@@ -11,11 +11,10 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    //Todo: Create user contacts model and layout
-    //Todo: MessageActivity Layout
-    //Todo: ContactsActivity Layout
-    //Todo: Floating action bar to create new message
-    //Todo: Nav Drawer to manage account and settings
+    // Todo: Create user contacts model and layout
+    // Todo: Create Nav Drawer Activity for Contacts
+    // Todo: Floating action bar to create new message
+    // Todo: Nav Drawer to manage account and settings
 
     Button button;
     Button messageBtn;
