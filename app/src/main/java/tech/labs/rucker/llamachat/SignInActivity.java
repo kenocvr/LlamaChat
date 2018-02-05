@@ -111,22 +111,7 @@ public class SignInActivity extends AppCompatActivity
     }
 
 
-
-
-
-
-
-
-//    GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-//            .requestIdToken(getString(R.string.default_web_client_id))
-//            .requestEmail()
-//            .build();
-
-
-
     private void signIn() {
-        //Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
-        //startActivityForResult(signInIntent, RC_SIGN_IN);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
