@@ -24,7 +24,9 @@ import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
 
-    // Todo: Attach messages to RecyclerView
+
+    // Todo: Scroll to bottom of List Automatically
+    // Todo: Get Messages onCreate. Initialize UI
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -52,19 +54,10 @@ public class MessageActivity extends AppCompatActivity {
         sendMessage();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView. setHasFixedSize(true);
+        //recyclerView.scrollToPosition(listItems.size());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        listItems = new ArrayList<>();
-        for(int i = 0; i <=10; i++){
-            ListItem listItem = new ListItem(
-                    "heading" +(i+1),
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            );
-            listItems.add(listItem);
-        }
 
-        adapter = new MessageAdapter(listItems, this);
-        recyclerView.setAdapter(adapter);
     }
     public void sendMessage(){
 
@@ -88,8 +81,22 @@ public class MessageActivity extends AppCompatActivity {
                messageRecipient.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        listItems = new ArrayList<>();
                         for (DataSnapshot msgSnapshot : dataSnapshot.getChildren()){
                             String msg0 = msgSnapshot.getValue().toString();
+                            ListItem listItem = new ListItem("Name", msg0);
+                            listItems.add(listItem);
+
+//                            for(int i = 0; i <=10; i++){
+//                                ListItem listItem = new ListItem(
+//                                        "heading" +(i+1),
+//                                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+//                                );
+//                                listItems.add(listItem);
+//                            }
+
+                            adapter = new MessageAdapter(listItems, MessageActivity.this);
+                            recyclerView.setAdapter(adapter);
                                 Log.d("ASDFASFGAS::",msg0);
                         }
                     }
