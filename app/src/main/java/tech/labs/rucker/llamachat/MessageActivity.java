@@ -3,6 +3,8 @@ package tech.labs.rucker.llamachat;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +19,20 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MessageActivity extends AppCompatActivity {
+
+    // Todo: Attach messages to RecyclerView
+
+    private RecyclerView recyclerView;
+    private RecyclerView.Adapter adapter;
+
+    private List<ListItem> listItems;
+
+    private DatabaseReference mRef;
+    private ValueEventListener mListener;
 
     Button sendBtn;
     TextView sentMessage;
@@ -27,99 +42,70 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-        sendMessage();
-        dbListen();
-    }
-    public void sendMessage(){
+        mRef = FirebaseDatabase.getInstance().getReference("Cat").child("messages");
         sentMessage = (TextView) findViewById(R.id.message);
         messageText = (TextInputEditText) findViewById(R.id.textInput);
         sendBtn = (Button)findViewById(R.id.sendBtn);
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        sendMessage();
+        recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        recyclerView. setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        listItems = new ArrayList<>();
+        for(int i = 0; i <=10; i++){
+            ListItem listItem = new ListItem(
+                    "heading" +(i+1),
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            );
+            listItems.add(listItem);
+        }
+
+        adapter = new MessageAdapter(listItems, this);
+        recyclerView.setAdapter(adapter);
+    }
+    public void sendMessage(){
+
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 final DatabaseReference messageRecipient;
-                String message = messageText.getText().toString();
+                final String message = messageText.getText().toString();
                  messageRecipient = database
                         .getReference("Cat")
-                        .child("messages")
-                        .push();
-                messageRecipient.setValue(message);
+                        .child("messages");
+
+                 final String msgKey = messageRecipient.push().getKey();
+
+                final String msgmsg = messageRecipient.push().setValue(message).toString();
+                //messageRecipient.setValue(message); // <====
                final String clientSideKey = messageRecipient.getKey();
-                Log.d("Message Key:", clientSideKey);
-                messageRecipient.addChildEventListener(new ChildEventListener() {
-                    //@Override
-                    public void onDataChange(DataSnapshot dataSnapshot ) {
-                        String value = dataSnapshot.getValue().toString();//.getChildren().toString(); //.getValue(String.class);
-                        for (DataSnapshot questionSnapshot : dataSnapshot.getChildren()) {
-//The key of the question
-                            String questionKey = questionSnapshot.getKey();
-                            Log.d("KEY TAG:", questionKey);
 
-//And if you want to access the rest:
-                            ;//String ans1 = questionSnapshot.child(clientSideKey).getValue(String.class);
-                            String ans2 = questionSnapshot.child(clientSideKey).getValue(String.class);
-                            Log.d("KEY TAG0:", ans2);
+               messageRecipient.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot msgSnapshot : dataSnapshot.getChildren()){
+                            String msg0 = msgSnapshot.getValue().toString();
+                                Log.d("ASDFASFGAS::",msg0);
                         }
-                        //DataSnapshot msgSnapshot = dataSnapshot.getChildren();
-                           // String msg = dataSnapshot.("-L4X9y4l0Do2oiEcNpdF").getValue(String.class);
-//                            Log.d("TAG:", msg);
-//                            sentMessage.setText(msg);
-
-
-
-                    }
-
-                    @Override
-                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                    }
-
-                    @Override
-                    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                    }
-
-                    @Override
-                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.d("Ur fucked", "So fucked");
+
                     }
                 });
+
             }
         });
 
 
     }
 
-    public void dbListen(){
-//        final FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference messageLog = database.getReference("Cat").child("messages");
-//        messageLog.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot ) {
-//                String value = dataSnapshot.getValue().toString();//.getChildren().toString(); //.getValue(String.class);
-//                sentMessage.setText(value);
-//                Log.d("TAG:", value);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Log.d("Ur fucked", "So fucked");
-//            }
-//        });
-    }
+
 
 }
