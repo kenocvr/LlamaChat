@@ -26,7 +26,7 @@ public class MessageActivity extends AppCompatActivity {
 
 
     // Todo: Scroll to bottom of List Automatically
-    // Todo: Get Messages onCreate. Initialize UI
+    // Todo: Get Messages during onCreate. Initialize UI
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -50,7 +50,7 @@ public class MessageActivity extends AppCompatActivity {
         messageText = (TextInputEditText) findViewById(R.id.textInput);
         sendBtn = (Button)findViewById(R.id.sendBtn);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-
+        initMessage();
         sendMessage();
         recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         recyclerView. setHasFixedSize(true);
@@ -59,8 +59,43 @@ public class MessageActivity extends AppCompatActivity {
 
 
     }
-    public void sendMessage(){
 
+    public void initMessage(){
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference messageRecipient;
+        final String message = messageText.getText().toString();
+        messageRecipient = database
+                .getReference("Cat")
+                .child("messages");
+
+        final String msgKey = messageRecipient.push().getKey();
+
+        final String msgmsg = messageRecipient.push().setValue(message).toString();
+        //messageRecipient.setValue(message); // <====
+        final String clientSideKey = messageRecipient.getKey();
+
+        messageRecipient.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listItems = new ArrayList<>();
+                for (DataSnapshot msgSnapshot : dataSnapshot.getChildren()){
+                    String msg0 = msgSnapshot.getValue().toString();
+                    ListItem listItem = new ListItem("Name", msg0);
+                    listItems.add(listItem);
+
+                    adapter = new MessageAdapter(listItems, MessageActivity.this);
+                    recyclerView.setAdapter(adapter);
+                    Log.d("ASDFASFGAS::",msg0);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    public void sendMessage(){
 
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -86,14 +121,6 @@ public class MessageActivity extends AppCompatActivity {
                             String msg0 = msgSnapshot.getValue().toString();
                             ListItem listItem = new ListItem("Name", msg0);
                             listItems.add(listItem);
-
-//                            for(int i = 0; i <=10; i++){
-//                                ListItem listItem = new ListItem(
-//                                        "heading" +(i+1),
-//                                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-//                                );
-//                                listItems.add(listItem);
-//                            }
 
                             adapter = new MessageAdapter(listItems, MessageActivity.this);
                             recyclerView.setAdapter(adapter);
