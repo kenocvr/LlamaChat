@@ -11,6 +11,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ContactsActivity extends AppCompatActivity {
 
+    // Todo: Create User Profile. Choose Display Name.
     // Todo: Create user contacts model and layout
     // Todo: Create Nav Drawer Activity for Contacts
     // Todo: Floating action bar to create new message
@@ -32,11 +33,9 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
 
-        button = (Button) findViewById(R.id.signOut);
-        messageBtn = (Button) findViewById(R.id.messageBtn);
-
+        button = findViewById(R.id.signOut);
+        messageBtn = findViewById(R.id.messageBtn);
         mAuth = FirebaseAuth.getInstance();
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
