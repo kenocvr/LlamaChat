@@ -24,6 +24,7 @@ import java.util.List;
 
 public class MessageActivity extends AppCompatActivity {
 
+
     // Todo: Hide Keyboard on Send
     // Todo: Fix Input field Overlap in UI
     // Todo: Scroll to bottom of List Automatically

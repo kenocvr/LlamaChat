@@ -11,8 +11,8 @@ import com.google.firebase.auth.FirebaseAuth;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    // Todo: Create User Profile. Choose Display Name.
-    // Todo: Create user contacts model and layout
+    // Todo: Add RecyclerView with mock contacts
+    // Todo: Create Add Contact and-or Search Contact
     // Todo: Create Nav Drawer Activity for Contacts
     // Todo: Floating action bar to create new message
     // Todo: Nav Drawer to manage account and settings

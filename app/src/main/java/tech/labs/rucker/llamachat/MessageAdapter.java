@@ -25,7 +25,7 @@ public MessageAdapter(List<ListItem> listItems, Context context) {
 @Override
 public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-        .inflate(R.layout.list_item, parent, false);
+        .inflate(R.layout.message_list_item, parent, false);
         return new ViewHolder(v);
         }
 
