@@ -1,4 +1,4 @@
-package tech.labs.rucker.llamachat;
+package tech.labs.rucker.llamachat.View;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,6 +31,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import tech.labs.rucker.llamachat.R;
 
 public class SignInActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {

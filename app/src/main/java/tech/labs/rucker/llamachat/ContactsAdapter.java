@@ -13,6 +13,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import tech.labs.rucker.llamachat.Model.ListItem;
+
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>{
     private List<ListItem> listItems;
     private Context context;
@@ -53,7 +55,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             textViewHead = itemView.findViewById(R.id.contactNameLbl);
-            textViewDesc = itemView.findViewById(R.id.contact);
+            textViewDesc = itemView.findViewById(R.id.contactName);
         }
     }
 }

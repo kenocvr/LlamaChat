@@ -1,4 +1,4 @@
-package tech.labs.rucker.llamachat;
+package tech.labs.rucker.llamachat.Model;
 
 /**
  * Created by Carlos on 2/8/2018.

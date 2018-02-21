@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import java.util.List;
 
+import tech.labs.rucker.llamachat.Model.ListItem;
+
 /**
  * Created by Carlos on 2/8/2018.
  */
