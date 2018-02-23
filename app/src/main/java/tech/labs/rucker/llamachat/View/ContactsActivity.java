@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -11,8 +12,10 @@ import android.widget.Button;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import tech.labs.rucker.llamachat.ContactsAdapter;
 import tech.labs.rucker.llamachat.Model.ListItem;
 import tech.labs.rucker.llamachat.R;
 
@@ -38,6 +41,7 @@ public class ContactsActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         mAuth.addAuthStateListener(mAuthListener);
+
     }
 
     @Override
@@ -48,6 +52,9 @@ public class ContactsActivity extends AppCompatActivity {
         //mRef = FirebaseDatabase.getInstance().getReference("contacts");
         button = findViewById(R.id.signOut);
         messageBtn = findViewById(R.id.messageBtn);
+        recyclerView = findViewById(R.id.contactsRecycler);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        initView();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -71,5 +78,20 @@ public class ContactsActivity extends AppCompatActivity {
                 startActivity(new Intent(ContactsActivity.this, MessageActivity.class));
             }
         });
+
+
+    }
+    public void initView(){
+        listItems = new ArrayList<>();
+        for(int i = 0; i <=10; i++){
+            ListItem listItem = new ListItem(
+                    "heading" +(i+1),
+                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+            );
+            listItems.add(listItem);
+        }
+
+        adapter = new ContactsAdapter(listItems, ContactsActivity.this);
+        recyclerView.setAdapter(adapter);
     }
 }

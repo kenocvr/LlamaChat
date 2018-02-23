@@ -171,6 +171,7 @@ public class MessageActivity extends AppCompatActivity {
                 final String uId = mAuth.getCurrentUser().getUid();
 
                 // Database Message Symmetry
+                // Users in conversation receive the same messages
                 messageRecipient = database
                         .getReference(uId)
                         .child(contactId + uId);
