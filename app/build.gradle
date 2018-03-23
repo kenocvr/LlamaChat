@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 26
-    defaultConfig {
+    defaultConfig{
         applicationId "tech.labs.rucker.llamachat"
         minSdkVersion 21
         targetSdkVersion 26
@@ -17,7 +17,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
+
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -40,3 +40,4 @@ dependencies {
     compile 'com.android.support:cardview-v7:26.1.0'
 }
 apply plugin: 'com.google.gms.google-services'
+}

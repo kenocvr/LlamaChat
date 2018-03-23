@@ -34,8 +34,9 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 import tech.labs.rucker.llamachat.R;
 
-public class SignInActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class SignInActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+
+    // Todo: Add new users uId to 'users' list on database
 
     SignInButton button;
     FirebaseAuth mAuth;
@@ -149,11 +150,8 @@ public class SignInActivity extends AppCompatActivity
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w("TAG", "signInWithCredential:failure", task.getException());
-                            //Snackbar.make(findViewById(R.id.drawer_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             //updateUI(null);
                         }
-
-                        // ...
                     }
                 });
     }

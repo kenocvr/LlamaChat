@@ -48,8 +48,6 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        // Current User (Parent)
-        // ContactId (Child)
         FirebaseAuth userId = FirebaseAuth.getInstance();
         mRef = FirebaseDatabase.getInstance().getReference(userId.getUid()).child("messages");
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -58,11 +56,10 @@ public class MessageActivity extends AppCompatActivity {
         sendBtn = findViewById(R.id.sendBtn);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
         initMessage();
-        //sendMessage();
-        sendMessage("contactId");
+        // Hard Coded Test User //
+        sendMessage("room");
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView. setHasFixedSize(true);
-        //recyclerView.scrollToPosition(listItems.size());
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
@@ -84,8 +81,7 @@ public class MessageActivity extends AppCompatActivity {
 //                .getReference(uId)
 //                .child("messages");
         messageRecipient = database
-                .getReference(uId)
-                .child("contactId" + uId);
+                .getReference("room");
 
         final String msgKey = messageRecipient.push().getKey();
         final String clientSideKey = messageRecipient.getKey();
@@ -100,7 +96,7 @@ public class MessageActivity extends AppCompatActivity {
                     listItems.add(listItem);
                     adapter = new MessageAdapter(listItems, MessageActivity.this);
                     recyclerView.setAdapter(adapter);
-                    Log.d("ASDFASFGAS::",msg0);
+                    Log.d("Message Data::",msg0);
                 }
             }
 
@@ -140,7 +136,7 @@ public class MessageActivity extends AppCompatActivity {
 
                             adapter = new MessageAdapter(listItems, MessageActivity.this);
                             recyclerView.setAdapter(adapter);
-                                Log.d("ASDFASFGAS::",msg0);
+                                Log.d("Message Data::",msg0);
                         }
                     }
 
@@ -153,7 +149,6 @@ public class MessageActivity extends AppCompatActivity {
             }
         });
 
-
     }
 
     public void sendMessage(final String contactId){
@@ -165,30 +160,33 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final DatabaseReference messageRecipient;
                 final DatabaseReference messageSender;
-                final String message = messageText.getText().toString();
-                //final String uId = mAuth.getUid();
                 final String name = mAuth.getCurrentUser().getDisplayName();
+                final String message = name + ": " + messageText.getText().toString();
+                //final String uId = mAuth.getUid();
+
                 final String uId = mAuth.getCurrentUser().getUid();
 
                 // Database Message Symmetry
                 // Users in conversation receive the same messages
+                // Creates Chat Room based on string parameter
                 messageRecipient = database
-                        .getReference(uId)
-                        .child(contactId + uId);
+                        .getReference(contactId);
 
-                messageSender = database
-                        .getReference("contactId")
-                        .child(uId + contactId);
+//                messageRecipient = database
+//                        .getReference(uId)
+//                        .child(contactId);
+//
+//                messageSender = database
+//                        .getReference(contactId)
+//                        .child(uId + contactId);
 
                 final String msgKey = messageRecipient.push().getKey();
-                final String msgKeySender = messageSender.push().getKey();
 
+                // Actually sends the message
                 final String msgmsg = messageRecipient.push().setValue(message).toString();
-                final String msgmsgSender = messageSender.push().setValue(message).toString();
 
                 final String clientSideKey = messageRecipient.getKey();
                 final String clientSideKeyRecipient = messageRecipient.getKey();
-
 
                 messageRecipient.addValueEventListener(new ValueEventListener() {
                     @Override
@@ -201,7 +199,7 @@ public class MessageActivity extends AppCompatActivity {
 
                             adapter = new MessageAdapter(listItems, MessageActivity.this);
                             recyclerView.setAdapter(adapter);
-                            Log.d("ASDFASFGAS::",msg0);
+                            Log.d("Message Data::",msg0);
                         }
                     }
 
@@ -210,26 +208,26 @@ public class MessageActivity extends AppCompatActivity {
 
                     }
                 });
-                messageSender.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        listItems = new ArrayList<>();
-                        for (DataSnapshot msgSnapshot : dataSnapshot.getChildren()){
-                            String msg0 = msgSnapshot.getValue().toString();
-                            ListItem listItem = new ListItem(name, msg0);
-                            listItems.add(listItem);
-
-                            adapter = new MessageAdapter(listItems, MessageActivity.this);
-                            recyclerView.setAdapter(adapter);
-                            Log.d("ASDFASFGAS::",msg0);
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
+//                messageSender.addValueEventListener(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//                        listItems = new ArrayList<>();
+//                        for (DataSnapshot msgSnapshot : dataSnapshot.getChildren()){
+//                            String msg0 = msgSnapshot.getValue().toString();
+//                            ListItem listItem = new ListItem(name, msg0);
+//                            listItems.add(listItem);
+//
+//                            adapter = new MessageAdapter(listItems, MessageActivity.this);
+//                            recyclerView.setAdapter(adapter);
+//                            Log.d("ASDFASFGAS::",msg0);
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
 
             }
         });
