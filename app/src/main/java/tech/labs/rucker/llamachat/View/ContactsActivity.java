@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -19,22 +20,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import tech.labs.rucker.llamachat.ContactsAdapter;
+import tech.labs.rucker.llamachat.DatabaseHelper;
 import tech.labs.rucker.llamachat.Model.ListItem;
 import tech.labs.rucker.llamachat.R;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    // Todo: Get current user email during onCreate. Write user to 'users' list in database
-    // Todo: Add RecyclerView with mock contacts
-    // Todo: Create Add Contact and-or Search Contact
-    // Todo: Create Nav Drawer Activity for Contacts
-    // Todo: Floating action bar to create new message
-    // Todo: Nav Drawer to manage account and settings
+    // Todo: Create "rooms" based on textInput strings
+        // Edit Text
+        // Firebase Database ⇒ push() ⇒  UserID.rooms
 
+    EditText roomEditText;
     Button button;
     Button messageBtn;
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
+    private String value;
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
     private List<ListItem> listItems;
@@ -52,8 +53,10 @@ public class ContactsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
         writeUserToList("Users");
+
         button = findViewById(R.id.signOut);
         messageBtn = findViewById(R.id.messageBtn);
+        roomEditText = findViewById(R.id.roomEditText);
         recyclerView = findViewById(R.id.contactsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         initView();
@@ -84,14 +87,33 @@ public class ContactsActivity extends AppCompatActivity {
 
 
     }
-    public void writeUserToList(final String userTest){
+    // method to write to Firebase database Params: parent, child, value
+
+    public void writeToDatabase(String parent, String child, String value){
+
+        DatabaseHelper roomName = new DatabaseHelper();
+        roomName.setParentNode("parentRoom").setChildNode("childRoom").setChildValue("valueRoom");
+
+
+        //.value = value;
+       // final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        //final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        //final DatabaseReference db;
+       // db = database.getReference(parent).child(child);
+       // final String msgmsg = db.push()
+        //        .setValue(value)
+        //        .toString();
+       // final String msgkey = db.getKey();
+    }
+
+    public void writeUserToList(final String param){
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-                final DatabaseReference messageRecipient;
+        final DatabaseReference messageRecipient;
                 messageRecipient = database
                         .getReference()
-                        .child(userTest);
-                final String messageRecipientStr = messageRecipient.getKey();
+                        .child(param);
+        final String messageRecipientStr = messageRecipient.getKey();
         final String msgmsg = messageRecipient.push()
                 .setValue(mAuth.getCurrentUser()
                         .getDisplayName())
@@ -130,5 +152,12 @@ public class ContactsActivity extends AppCompatActivity {
 
         adapter = new ContactsAdapter(listItems, ContactsActivity.this);
         recyclerView.setAdapter(adapter);
+    }
+
+    public void addRoom(View view) {
+        String roomStr = roomEditText.getText().toString();
+        //writeToDatabase("parent", "child", roomStr);
+        DatabaseHelper roomName = new DatabaseHelper();
+        roomName.setParentNode("parentRm").setChildNode("childRm").setChildValue("valueRm").push();
     }
 }
