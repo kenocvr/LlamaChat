@@ -57,12 +57,22 @@ public class DatabaseHelper {
         this.childValue = childValue;
         return this;
     }
+    public void pushRoot(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference db;
+        db = database.getReference(getParentNode());
+        String msgmsg = db
+                .setValue(getChildValue())
+                .toString();
+        String msgkey = db.getKey();
+    }
     public void push(){
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference db;
         db = database.getReference(getParentNode()).child(getChildNode());
-        String msgmsg = db.push()
+        String msgmsg = db
                 .setValue(getChildValue())
                 .toString();
         String msgkey = db.getKey();

@@ -28,7 +28,7 @@ import tech.labs.rucker.llamachat.R;
 
 public class MessageActivity extends AppCompatActivity {
 
-
+    // Todo: Receive extras from "room" selection in Contacts recyclerView
     // Todo: Hide Keyboard on Send
     // Todo: Fix Input field Overlap in UI
     // Todo: Scroll to bottom of List Automatically

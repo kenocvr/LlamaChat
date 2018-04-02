@@ -27,6 +27,29 @@ import tech.labs.rucker.llamachat.R;
 public class ContactsActivity extends AppCompatActivity {
 
     // Todo: Create "rooms" based on textInput strings
+    // Todo: Read/Write to both locations userID: rooms, (Root)Rooms.
+        /*
+        *   ChatRoom Schema
+        * */
+        /*
+        *User rooms -- Display in client side RecyclerView/list
+        * */
+    //(ROOT)userID:
+        // Rooms:
+            // myRoomStr0
+            // myRoomStr1
+        /*
+        * Rooms with chat messages. Root Level. All clients can add(read) and write to.
+        * */
+    //(ROOT)Rooms:
+        // myRoomStr0:
+            // "Carlos says: Doood! The Chat room works!!!"
+            // "D says: ikr, so cool!"
+
+        // myRoomStr1:
+
+        // herRoomStr4: "No one knows about this room yet!"
+
         // Edit Text
         // Firebase Database ⇒ push() ⇒  UserID.rooms
 
@@ -87,24 +110,23 @@ public class ContactsActivity extends AppCompatActivity {
 
 
     }
-    // method to write to Firebase database Params: parent, child, value
 
-    public void writeToDatabase(String parent, String child, String value){
-
-        DatabaseHelper roomName = new DatabaseHelper();
-        roomName.setParentNode("parentRoom").setChildNode("childRoom").setChildValue("valueRoom");
-
-
-        //.value = value;
-       // final FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        //final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        //final DatabaseReference db;
-       // db = database.getReference(parent).child(child);
-       // final String msgmsg = db.push()
-        //        .setValue(value)
-        //        .toString();
-       // final String msgkey = db.getKey();
-    }
+//    public void writeToDatabase(String parent, String child, String value){
+//
+//        DatabaseHelper roomName = new DatabaseHelper();
+//        roomName.setParentNode("parentRoom").setChildNode("childRoom").setChildValue("valueRoom");
+//
+//
+//        //.value = value;
+//       // final FirebaseAuth mAuth = FirebaseAuth.getInstance();
+//        //final FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        //final DatabaseReference db;
+//       // db = database.getReference(parent).child(child);
+//       // final String msgmsg = db.push()
+//        //        .setValue(value)
+//        //        .toString();
+//       // final String msgkey = db.getKey();
+//    }
 
     public void writeUserToList(final String param){
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -158,6 +180,6 @@ public class ContactsActivity extends AppCompatActivity {
         String roomStr = roomEditText.getText().toString();
         //writeToDatabase("parent", "child", roomStr);
         DatabaseHelper roomName = new DatabaseHelper();
-        roomName.setParentNode("parentRm").setChildNode("childRm").setChildValue("valueRm").push();
+        roomName.setParentNode("parentRm").setChildNode("childRm").setChildValue(roomStr).push();
     }
 }
