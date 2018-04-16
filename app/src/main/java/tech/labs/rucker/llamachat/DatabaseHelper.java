@@ -8,6 +8,19 @@ import com.google.firebase.database.FirebaseDatabase;
  * Created by Carlos on 3/24/2018.
  */
 
+    // Todo: User Rooms schema.
+// UserID:
+//     Rooms:
+//          ****: "myRoom1"
+//          ****: "myRoom2"
+    
+    // Todo: Rooms Messages
+// Rooms:
+//      myRoom1:
+//          ****: "displayName says: first message"
+//          ****: "displayName says: second message"
+
+
 public class DatabaseHelper {
     FirebaseAuth mAuth;
     FirebaseAuth.AuthStateListener mAuthListener;
@@ -71,9 +84,19 @@ public class DatabaseHelper {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference db;
-        db = database.getReference(getParentNode()).child(getChildNode());
+        db = database.getReference(getParentNode()).child(getChildNode()).push();
         String msgmsg = db
                 .setValue(getChildValue())
+                .toString();
+        String msgkey = db.getKey();
+    }
+    public void pushTwo(){
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference db;
+        db = database.getReference(getParentNode()).child(getChildNode()).push();
+        String msgmsg = db
+                //.setValue(getChildValue())
                 .toString();
         String msgkey = db.getKey();
     }

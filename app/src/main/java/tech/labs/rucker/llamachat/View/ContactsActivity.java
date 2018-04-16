@@ -7,27 +7,32 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import tech.labs.rucker.llamachat.ContactsAdapter;
 import tech.labs.rucker.llamachat.DatabaseHelper;
+import tech.labs.rucker.llamachat.MessageAdapter;
 import tech.labs.rucker.llamachat.Model.ListItem;
 import tech.labs.rucker.llamachat.R;
 
 public class ContactsActivity extends AppCompatActivity {
 
-    // Todo: Create "rooms" based on textInput strings
-    // Todo: Read/Write to both locations userID: rooms, (Root)Rooms.
+
+    // Todo(1): Item click listener... myRoomStr.OnClickListener => Intent/Extras => MessageActivity
+
         /*
         *   ChatRoom Schema
         * */
@@ -36,15 +41,15 @@ public class ContactsActivity extends AppCompatActivity {
         * */
     //(ROOT)userID:
         // Rooms:
-            // myRoomStr0
-            // myRoomStr1
+            // *****: myRoomStr0
+            // *****: myRoomStr1
         /*
         * Rooms with chat messages. Root Level. All clients can add(read) and write to.
         * */
     //(ROOT)Rooms:
         // myRoomStr0:
-            // "Carlos says: Doood! The Chat room works!!!"
-            // "D says: ikr, so cool!"
+            // ******: "Carlos says: Doood! The Chat room works!!!"
+            // ******: "D says: ikr, so cool!"
 
         // myRoomStr1:
 
@@ -75,14 +80,14 @@ public class ContactsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contacts);
-        writeUserToList("Users");
+        //writeUserToList("Users");
 
         button = findViewById(R.id.signOut);
         messageBtn = findViewById(R.id.messageBtn);
         roomEditText = findViewById(R.id.roomEditText);
         recyclerView = findViewById(R.id.contactsRecycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        initView();
+        contactsView();
         //addUserToList();
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
@@ -110,7 +115,43 @@ public class ContactsActivity extends AppCompatActivity {
 
 
     }
+    public void contactsView(){
+        FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
+        DatabaseReference databaseReference;
+        // Get reference to User's rooms list in:
+        // userId: rooms: ...
+        databaseReference = databaseInstance.getReference("room");
 
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                listItems = new ArrayList<>();
+                for (DataSnapshot msgSnapshot : dataSnapshot.getChildren()){
+                    String roomName = msgSnapshot.getValue().toString();
+                    ListItem listItem = new ListItem("room:", roomName);
+                    listItems.add(listItem);
+                    adapter = new MessageAdapter(listItems, ContactsActivity.this);
+                    recyclerView.setAdapter(adapter);
+                    Log.d("Message Data::",roomName);
+
+                    // Clicking chat room item
+                    recyclerView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // Launch MessageActivity with extras: roomName, etc
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
+    }
 //    public void writeToDatabase(String parent, String child, String value){
 //
 //        DatabaseHelper roomName = new DatabaseHelper();
@@ -162,24 +203,42 @@ public class ContactsActivity extends AppCompatActivity {
             String uid = user.getUid();
         }
     }
-    public void initView(){
-        listItems = new ArrayList<>();
-        for(int i = 0; i <=10; i++){
-            ListItem listItem = new ListItem(
-                    "heading" +(i+1),
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
-            );
-            listItems.add(listItem);
-        }
-
-        adapter = new ContactsAdapter(listItems, ContactsActivity.this);
-        recyclerView.setAdapter(adapter);
-    }
+//    public void initView(){
+//        listItems = new ArrayList<>();
+//        for(int i = 0; i <=10; i++){
+//            ListItem listItem = new ListItem(
+//                    "heading" +(i+1),
+//                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+//            );
+//            listItems.add(listItem);
+//        }
+//
+//        adapter = new ContactsAdapter(listItems, ContactsActivity.this);
+//        recyclerView.setAdapter(adapter);
+//    }
 
     public void addRoom(View view) {
         String roomStr = roomEditText.getText().toString();
-        //writeToDatabase("parent", "child", roomStr);
         DatabaseHelper roomName = new DatabaseHelper();
+
+        // Todo: Duplicate entry check.
+        // Check if entry does not exist in database
+        // if (entry == null){ roomName...push(); }
         roomName.setParentNode("parentRm").setChildNode("childRm").setChildValue(roomStr).push();
+        DatabaseHelper usersRooms = new DatabaseHelper();
+        DatabaseHelper roomMessages = new DatabaseHelper();
+        // Todo: RecyclerView based on these room values.
+        // User's rooms
+        usersRooms.setParentNode(mAuth.getUid()).setChildNode("Rooms").setChildValue(roomStr).push();
+        // Todo: Check if room exists. Append messages. Avoid deleting messages with blank room creation.
+        // If room != null, initialize room with welcome message.
+        // //JSON tree requires children with messages
+        // Chat room schema //
+        // Rooms
+        // <roomStr>
+        // ****:<message>
+        // ****:<message>
+        roomMessages.setParentNode("Rooms").setChildNode(roomStr).pushTwo();
     }
+
 }
