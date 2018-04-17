@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import tech.labs.rucker.llamachat.MessageAdapter;
+import tech.labs.rucker.llamachat.Controller.MessageAdapter;
 import tech.labs.rucker.llamachat.Model.ListItem;
 import tech.labs.rucker.llamachat.R;
 

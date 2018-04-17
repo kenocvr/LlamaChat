@@ -1,4 +1,4 @@
-package tech.labs.rucker.llamachat;
+package tech.labs.rucker.llamachat.Controller;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;

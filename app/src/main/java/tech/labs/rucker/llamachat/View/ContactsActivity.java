@@ -23,8 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import tech.labs.rucker.llamachat.DatabaseHelper;
-import tech.labs.rucker.llamachat.MessageAdapter;
+import tech.labs.rucker.llamachat.Controller.DatabaseHelper;
+import tech.labs.rucker.llamachat.Controller.MessageAdapter;
 import tech.labs.rucker.llamachat.Model.ListItem;
 import tech.labs.rucker.llamachat.R;
 
@@ -118,9 +118,11 @@ public class ContactsActivity extends AppCompatActivity {
     public void contactsView(){
         FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference;
+        FirebaseAuth auth;
+
         // Get reference to User's rooms list in:
         // userId: rooms: ...
-        databaseReference = databaseInstance.getReference("room");
+        databaseReference = databaseInstance.getReferenceFromUrl("https://llamachat-a4865.firebaseio.com/cFTFT9wNF9aLRpijxpmuncTbETt2/Rooms");
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -134,13 +136,8 @@ public class ContactsActivity extends AppCompatActivity {
                     recyclerView.setAdapter(adapter);
                     Log.d("Message Data::",roomName);
 
-                    // Clicking chat room item
-                    recyclerView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            // Launch MessageActivity with extras: roomName, etc
-                        }
-                    });
+                    // Todo: Clicking chat room item. Pass extras: roomName, etc
+                    // Follow pattern: https://android.jlelse.eu/click-listener-for-recyclerview-adapter-2d17a6f6f6c9
                 }
             }
 

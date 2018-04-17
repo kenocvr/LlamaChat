@@ -1,4 +1,4 @@
-package tech.labs.rucker.llamachat;
+package tech.labs.rucker.llamachat.Controller;
 
 /**
  * Created by Carlos on 2/19/2018.
@@ -14,6 +14,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import tech.labs.rucker.llamachat.Model.ListItem;
+import tech.labs.rucker.llamachat.R;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>{
     private List<ListItem> listItems;
