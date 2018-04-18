@@ -5,7 +5,9 @@ package tech.labs.rucker.llamachat.Controller;
  */
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import java.util.List;
 
 import tech.labs.rucker.llamachat.Model.ListItem;
 import tech.labs.rucker.llamachat.R;
+import tech.labs.rucker.llamachat.View.MessageActivity;
 
 public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHolder>{
     private List<ListItem> listItems;
@@ -36,9 +39,19 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
     @Override
     public void onBindViewHolder(ContactsAdapter.ViewHolder holder, int position) {
 
-        ListItem listItem = listItems.get(position);
+        final ListItem listItem = listItems.get(position);
         holder.textViewHead.setText(listItem.getHead());
         holder.textViewDesc.setText(listItem.getDesc());
+
+        holder.textViewDesc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("HOLDER CLICK", "Holder clicked");
+                Intent intent = new Intent(context, MessageActivity.class);
+                intent.putExtra("ROOM_NAME", listItem.getDesc());
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override

@@ -48,9 +48,10 @@ public class MessageActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        FirebaseAuth userId = FirebaseAuth.getInstance();
-        mRef = FirebaseDatabase.getInstance().getReference(userId.getUid()).child("messages");
+        FirebaseAuth user = FirebaseAuth.getInstance();
+        mRef = FirebaseDatabase.getInstance().getReference(user.getUid()).child("messages");
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        checkIntent();
         sentMessage = findViewById(R.id.message);
         messageText = (TextInputEditText) findViewById(R.id.textInput);
         sendBtn = findViewById(R.id.sendBtn);
@@ -63,6 +64,14 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
+    public void checkIntent(){
+        if(getIntent().hasExtra("ROOM_NAME")){
+            String roomName = getIntent().getStringExtra("ROOM_NAME");
+        }
+
+    }
+
+
     public String displayUser() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         return user.getDisplayName();
@@ -77,11 +86,12 @@ public class MessageActivity extends AppCompatActivity {
         final String name = mAuth.getCurrentUser().getDisplayName();
         final String uId = mAuth.getCurrentUser().getUid();
         final DatabaseReference messageRecipient;
+        String roomName = getIntent().getStringExtra("ROOM_NAME");
 //        messageRecipient = database
 //                .getReference(uId)
 //                .child("messages");
         messageRecipient = database
-                .getReference("room");
+                .getReference(roomName);
 
         final String msgKey = messageRecipient.push().getKey();
         final String clientSideKey = messageRecipient.getKey();

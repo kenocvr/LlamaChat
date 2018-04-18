@@ -23,8 +23,8 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import tech.labs.rucker.llamachat.Controller.ContactsAdapter;
 import tech.labs.rucker.llamachat.Controller.DatabaseHelper;
-import tech.labs.rucker.llamachat.Controller.MessageAdapter;
 import tech.labs.rucker.llamachat.Model.ListItem;
 import tech.labs.rucker.llamachat.R;
 
@@ -118,11 +118,13 @@ public class ContactsActivity extends AppCompatActivity {
     public void contactsView(){
         FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference;
-        FirebaseAuth auth;
 
+        //String userId = mAuth.getUid();
+        String urlPath = "https://llamachat-a4865.firebaseio.com/cFTFT9wNF9aLRpijxpmuncTbETt2/Rooms";
+        //"https://llamachat-a4865.firebaseio.com/" + userId + "/Rooms";
         // Get reference to User's rooms list in:
         // userId: rooms: ...
-        databaseReference = databaseInstance.getReferenceFromUrl("https://llamachat-a4865.firebaseio.com/cFTFT9wNF9aLRpijxpmuncTbETt2/Rooms");
+        databaseReference = databaseInstance.getReferenceFromUrl(urlPath);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
@@ -132,7 +134,7 @@ public class ContactsActivity extends AppCompatActivity {
                     String roomName = msgSnapshot.getValue().toString();
                     ListItem listItem = new ListItem("room:", roomName);
                     listItems.add(listItem);
-                    adapter = new MessageAdapter(listItems, ContactsActivity.this);
+                    adapter = new ContactsAdapter(listItems, ContactsActivity.this);
                     recyclerView.setAdapter(adapter);
                     Log.d("Message Data::",roomName);
 
@@ -222,6 +224,7 @@ public class ContactsActivity extends AppCompatActivity {
         // Check if entry does not exist in database
         // if (entry == null){ roomName...push(); }
         roomName.setParentNode("parentRm").setChildNode("childRm").setChildValue(roomStr).push();
+        roomName.setParentNode("Rooms").setChildNode(roomStr).setChildValue("Welcome!").push();
         DatabaseHelper usersRooms = new DatabaseHelper();
         DatabaseHelper roomMessages = new DatabaseHelper();
         // Todo: RecyclerView based on these room values.
@@ -235,7 +238,7 @@ public class ContactsActivity extends AppCompatActivity {
         // <roomStr>
         // ****:<message>
         // ****:<message>
-        roomMessages.setParentNode("Rooms").setChildNode(roomStr).pushTwo();
+        roomMessages.setParentNode("Rooms").setChildNode(roomStr).setChildValue("Welcome!");
     }
 
 }
