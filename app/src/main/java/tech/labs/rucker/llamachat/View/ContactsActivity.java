@@ -238,6 +238,8 @@ public class ContactsActivity extends AppCompatActivity {
         // <roomStr>
         // ****:<message>
         // ****:<message>
+
+        // Creates room with welcome message
         roomMessages.setParentNode("Rooms").setChildNode(roomStr).setChildValue("Welcome!");
     }
 

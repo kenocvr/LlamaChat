@@ -56,6 +56,7 @@ public class MessageActivity extends AppCompatActivity {
         messageText = (TextInputEditText) findViewById(R.id.textInput);
         sendBtn = findViewById(R.id.sendBtn);
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
         initMessage();
         // Hard Coded Test User //
         sendMessage("room");
@@ -64,11 +65,13 @@ public class MessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
     }
-    public void checkIntent(){
+    public String checkIntent(){
+        String emptyStr = "";
         if(getIntent().hasExtra("ROOM_NAME")){
-            String roomName = getIntent().getStringExtra("ROOM_NAME");
+           String roomName = getIntent().getStringExtra("ROOM_NAME");
+           return roomName;
         }
-
+        return emptyStr;
     }
 
 
@@ -86,12 +89,14 @@ public class MessageActivity extends AppCompatActivity {
         final String name = mAuth.getCurrentUser().getDisplayName();
         final String uId = mAuth.getCurrentUser().getUid();
         final DatabaseReference messageRecipient;
-        String roomName = getIntent().getStringExtra("ROOM_NAME");
+        //String roomName = getIntent().getStringExtra("ROOM_NAME");
+
 //        messageRecipient = database
 //                .getReference(uId)
 //                .child("messages");
         messageRecipient = database
-                .getReference(roomName);
+                .getReferenceFromUrl("https://llamachat-a4865.firebaseio.com/Rooms/" + checkIntent());
+                //.getReference(roomName);
 
         final String msgKey = messageRecipient.push().getKey();
         final String clientSideKey = messageRecipient.getKey();
@@ -164,6 +169,8 @@ public class MessageActivity extends AppCompatActivity {
     public void sendMessage(final String contactId){
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+
         sendBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -176,25 +183,15 @@ public class MessageActivity extends AppCompatActivity {
 
                 final String uId = mAuth.getCurrentUser().getUid();
 
-                // Database Message Symmetry
-                // Users in conversation receive the same messages
-                // Creates Chat Room based on string parameter
+                // Reference to room path
                 messageRecipient = database
-                        .getReference(contactId);
+                        .getReferenceFromUrl("https://llamachat-a4865.firebaseio.com/Rooms/" + checkIntent());
 
-//                messageRecipient = database
-//                        .getReference(uId)
-//                        .child(contactId);
-//
-//                messageSender = database
-//                        .getReference(contactId)
-//                        .child(uId + contactId);
 
                 final String msgKey = messageRecipient.push().getKey();
 
                 // Actually sends the message
                 final String msgmsg = messageRecipient.push().setValue(message).toString();
-
                 final String clientSideKey = messageRecipient.getKey();
                 final String clientSideKeyRecipient = messageRecipient.getKey();
 
