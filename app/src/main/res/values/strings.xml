@@ -12,4 +12,6 @@
     <string name="_2nd_activity">2nd Activity</string>
     <string name="message_activity">Message Activity</string>
     <string name="sign_out">Sign out</string>
+    <string name="room_name">Room Name</string>
+    <string name="add">Add</string>
 </resources>
