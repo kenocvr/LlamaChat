@@ -8,13 +8,13 @@ import com.google.firebase.database.FirebaseDatabase;
  * Created by Carlos on 3/24/2018.
  */
 
-    // Todo: User Rooms schema.
+    //  User Rooms schema. //
 // UserID:
 //     Rooms:
 //          ****: "myRoom1"
 //          ****: "myRoom2"
     
-    // Todo: Rooms Messages
+    // Rooms Messages  //
 // Rooms:
 //      myRoom1:
 //          ****: "displayName says: first message"

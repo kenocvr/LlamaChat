@@ -1,13 +1,13 @@
 package tech.labs.rucker.llamachat.View;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -27,10 +27,10 @@ import tech.labs.rucker.llamachat.R;
 
 public class MessageActivity extends AppCompatActivity {
 
+    // Todo: BUG -- all rooms only display first message.
     // Todo: Delete room from list with long-press and/or button.
     // Todo: Check for empty-text room. Text input should not be empty.
     // Todo: Hide Keyboard on Send
-    // Todo: Fix Input field Overlap in UI
     // Todo: Scroll to bottom of List Automatically
 
     private RecyclerView recyclerView;
@@ -39,7 +39,7 @@ public class MessageActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     private ValueEventListener mListener;
 
-    Button sendBtn;
+    FloatingActionButton sendBtn;
     TextView sentMessage;
     EditText messageText;
     private String contactId;
@@ -66,23 +66,24 @@ public class MessageActivity extends AppCompatActivity {
 
     }
     public String checkIntent(){
-        String emptyStr = "";
-        if(getIntent().hasExtra("ROOM_NAME")){
+
            String roomName = getIntent().getStringExtra("ROOM_NAME");
+            Log.d("String EXTRA", roomName);
            return roomName;
-        }
-        return emptyStr;
+
     }
 
     public void initMessage(){
-        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         final String name = mAuth.getCurrentUser().getDisplayName();
         final String uId = mAuth.getCurrentUser().getUid();
-        final DatabaseReference messageRecipient;
+        DatabaseReference messageRecipient;
+
+        String roomName = getIntent().getStringExtra("ROOM_NAME");
 
         messageRecipient = database
-                .getReferenceFromUrl("https://llamachat-a4865.firebaseio.com/Rooms/" + checkIntent());
+                .getReferenceFromUrl("https://llamachat-a4865.firebaseio.com/Rooms/" + roomName);
 
         final String msgKey = messageRecipient.push().getKey();
         final String clientSideKey = messageRecipient.getKey();
@@ -120,16 +121,23 @@ public class MessageActivity extends AppCompatActivity {
             public void onClick(View v) {
                 final DatabaseReference messageRecipient;
                 final DatabaseReference messageSender;
+
+                FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
+                DatabaseReference databaseReference;
+
+
                 final String name = mAuth.getCurrentUser().getDisplayName();
                 final String message = name + ": \n" + messageText.getText().toString();
                 //final String uId = mAuth.getUid();
 
                 final String uId = mAuth.getCurrentUser().getUid();
 
+                String urlPath = "https://llamachat-a4865.firebaseio.com/Rooms/" + checkIntent();
                 // Reference to room path
                 messageRecipient = database
                         .getReferenceFromUrl("https://llamachat-a4865.firebaseio.com/Rooms/" + checkIntent());
 
+                databaseReference = databaseInstance.getReferenceFromUrl(urlPath);
 
                 final String msgKey = messageRecipient.push().getKey();
 
@@ -138,7 +146,7 @@ public class MessageActivity extends AppCompatActivity {
                 final String clientSideKey = messageRecipient.getKey();
                 final String clientSideKeyRecipient = messageRecipient.getKey();
 
-                messageRecipient.addValueEventListener(new ValueEventListener() {
+                databaseReference.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         listItems = new ArrayList<>();

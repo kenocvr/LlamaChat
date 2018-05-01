@@ -91,7 +91,7 @@ public class ContactsActivity extends AppCompatActivity {
                     recyclerView.setAdapter(adapter);
                     Log.d("Message Data::",roomName);
 
-                    // Todo: Clicking chat room item. Pass extras: roomName, etc
+
                 }
             }
 

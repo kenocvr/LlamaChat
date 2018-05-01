@@ -36,7 +36,7 @@ import tech.labs.rucker.llamachat.R;
 
 public class SignInActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    // Todo: Add new users uId to 'users' list on database
+
 
     SignInButton button;
     FirebaseAuth mAuth;

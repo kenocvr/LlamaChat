@@ -49,6 +49,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<ContactsAdapter.ViewHo
                 Log.d("HOLDER CLICK", "Holder clicked");
                 Intent intent = new Intent(context, MessageActivity.class);
                 intent.putExtra("ROOM_NAME", listItem.getDesc());
+                Log.d("HOLDER ITEM::", listItem.getDesc());
                 context.startActivity(intent);
             }
         });
