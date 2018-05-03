@@ -108,13 +108,13 @@ public class ContactsActivity extends AppCompatActivity {
         String roomStr = roomEditText.getText().toString();
         DatabaseHelper roomName = new DatabaseHelper();
         roomName.setParentNode("parentRm").setChildNode("childRm").setChildValue(roomStr).push();
-        roomName.setParentNode("Rooms").setChildNode(roomStr).setChildValue("Welcome!").push();
+        roomName.setParentNode("Rooms").setChildNode(roomStr).setChildValue("Welcome to " + roomStr + "!").push();
         DatabaseHelper usersRooms = new DatabaseHelper();
         DatabaseHelper roomMessages = new DatabaseHelper();
         // User's rooms
         usersRooms.setParentNode(mAuth.getUid()).setChildNode("Rooms").setChildValue(roomStr).push();
         // Creates room with welcome message
-        roomMessages.setParentNode("Rooms").setChildNode(roomStr).setChildValue("Welcome!");
+        roomMessages.setParentNode("Rooms").setChildNode(roomStr).setChildValue("Welcome to " + roomStr + "!");
     }
 
 }
