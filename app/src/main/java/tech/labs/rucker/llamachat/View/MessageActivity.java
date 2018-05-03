@@ -27,7 +27,7 @@ import tech.labs.rucker.llamachat.R;
 
 public class MessageActivity extends AppCompatActivity {
 
-    // Todo: BUG -- all rooms only display first message.
+    // Todo: Change from my userID rooms list to current user's userID
     // Todo: Delete room from list with long-press and/or button.
     // Todo: Check for empty-text room. Text input should not be empty.
     // Todo: Hide Keyboard on Send

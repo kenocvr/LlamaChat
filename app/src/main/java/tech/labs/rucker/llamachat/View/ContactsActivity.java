@@ -76,7 +76,10 @@ public class ContactsActivity extends AppCompatActivity {
         FirebaseDatabase databaseInstance = FirebaseDatabase.getInstance();
         DatabaseReference databaseReference;
 
-        String urlPath = "https://llamachat-a4865.firebaseio.com/cFTFT9wNF9aLRpijxpmuncTbETt2/Rooms";
+        // Todo: Change url path to current user
+        // cFTFT9wNF9aLRpijxpmuncTbETt2 TEST USER
+        String userID = mAuth.getUid();
+        String urlPath = "https://llamachat-a4865.firebaseio.com/"+userID+"/Rooms";
         databaseReference = databaseInstance.getReferenceFromUrl(urlPath);
 
         databaseReference.addValueEventListener(new ValueEventListener() {
